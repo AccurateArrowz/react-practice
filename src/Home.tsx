@@ -6,6 +6,7 @@ export default function Home() {
     <div>
         <p>Home page</p>
     <Link to='hotel-management'>hotel management </Link>
+    <Link to='hotel'>hotel management </Link>
     </div>
   )
 }

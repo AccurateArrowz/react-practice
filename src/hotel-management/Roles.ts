@@ -1,0 +1,1 @@
+export type Roles = 'owner' | 'manager' | 'receptionist'

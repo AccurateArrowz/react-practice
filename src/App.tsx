@@ -6,12 +6,16 @@ import { Rooms, RoomTypes, Dashboard } from './hotel-management';
 import HotelManagementLayout from './hotel-management/HotelManagementLayout';
 import RequireRole from './hotel-management/RequireRole';
 import Home from './Home';
+import HotelDetail from './hotel/components/HotelDetailPage';
 // import {RoomTypes, Rooms}
 
 const hotelManagementRouter = createBrowserRouter([
    {
     path: "/",
     element: <Home></Home> },
+      {
+    path: `/hotels/:id`,
+    element: <HotelDetail/> },
   {
     path: "/hotel-management",
     element: <HotelManagementLayout />,
