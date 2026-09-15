@@ -44,7 +44,6 @@ export default function useFetch<T = unknown>({url, queryParams = '', shouldLazy
   useEffect(() => {    
     if(shouldLazyFetch) return;
     fetchData();
-
   }, [url]);
 
   return { data, loading, error, fetchData };

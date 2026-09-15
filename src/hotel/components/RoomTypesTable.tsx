@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
-import { RoomType, RoomTypesWithAvailableRoomsArray } from '../hotel.types'
+import { RoomType, RoomTypeWithAvailableRooms } from '../hotel.types'
 import RoomTypeRow from './RoomTypeRow'
+import { UpdateRoomTypesSelected } from './HotelDetailPage';
 
 type RoomTypesTableProps = { 
-    roomTypes: RoomType[] | RoomTypesWithAvailableRoomsArray;
+    roomTypes: RoomType[] | RoomTypeWithAvailableRooms[];
+    updateRoomTypesSelected : UpdateRoomTypesSelected;
 }
 
-export default function RoomTypesTable({roomTypes}: RoomTypesTableProps) {
+export default function RoomTypesTable({roomTypes, updateRoomTypesSelected}: RoomTypesTableProps) {
     const [showRoomsCannotBeSelected, setShowRoomsCannotBeSelected] =useState(false);
 
   return (
@@ -23,7 +25,11 @@ export default function RoomTypesTable({roomTypes}: RoomTypesTableProps) {
         </thead>
     <tbody >
     {roomTypes?.map(roomType => 
-        <RoomTypeRow roomType={roomType} showRoomsCannotBeSelected = {() => setShowRoomsCannotBeSelected(true)} />)}
+        <RoomTypeRow key = {roomType.id} 
+        roomType={roomType}
+             showRoomsCannotBeSelected = {() => setShowRoomsCannotBeSelected(true)} 
+             updateRoomTypesSelected={updateRoomTypesSelected}
+             />)}
     </tbody>
 
 

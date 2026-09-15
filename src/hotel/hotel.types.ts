@@ -14,7 +14,7 @@ export interface RoomType {
 }
 
 export type RoomTypeWithAvailableRooms = RoomType &  {  availableRooms?: number;}
-export type RoomTypesWithAvailableRoomsArray = RoomTypeWithAvailableRooms[];
+export type RoomTypesWithAvailableRooms= RoomTypeWithAvailableRooms[]; //note the 's'; this is RoomTypes..
 
 
 /**
