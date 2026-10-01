@@ -1,28 +1,31 @@
 import React from 'react'
 import { RoomType, RoomTypeWithAvailableRooms } from '../hotel.types'
 import RoomsSelector from './RoomsSelector';
-import { UpdateRoomTypesSelected } from './HotelDetailPage';
+import { SelectedRoomTypes, UpdateRoomTypesSelected } from './HotelDetailPage';
 
 type RoomTypeRowProps = { 
   roomType: RoomType | RoomTypeWithAvailableRooms; 
-  showRoomsCannotBeSelected: () => void;
+  showSelectionWarning: () => void;
   updateRoomTypesSelected : UpdateRoomTypesSelected;
+  selectedRoomTypes: SelectedRoomTypes | null ;
 }
 
-export default function RoomTypeRow({roomType, showRoomsCannotBeSelected, updateRoomTypesSelected}: RoomTypeRowProps) {
+export default function RoomTypeRow({roomType, showSelectionWarning, selectedRoomTypes, updateRoomTypesSelected}: RoomTypeRowProps) {
    const guests = `${roomType.adults } adults ${roomType.children } children`
   return (
     <tr>
       {/* should show 3 cols data : name, guest and room */}
     <td>{roomType.name}</td>
     <td>{guests}</td>
-    <RoomsSelector 
-    roomTypeId={roomType.id}
-    availableRooms = {roomType.availableRooms  } 
-    showRoomsCannotBeSelected={showRoomsCannotBeSelected}
-    updateRoomTypesSelected={updateRoomTypesSelected}
-
-    />
+    <td>
+      <RoomsSelector 
+      roomTypeId={roomType.roomTypeId}
+      availableRooms = {roomType.availableRooms ?? undefined } //intentionally passing undefined to show empty dropdown when user has not selected checkin dates and available rooms is not selected 
+      showSelectionWarning={showSelectionWarning}
+      selectedRoomTypes = {selectedRoomTypes}
+      updateRoomTypesSelected={updateRoomTypesSelected}
+      />
+    </td>
     </tr>
   )
 } 

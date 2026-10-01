@@ -3,11 +3,14 @@ import type { FetchAvailableRooms } from "./HotelDetailPage";
 
 type BookingDatesPickerProps = {
   fetchAvailableRooms: FetchAvailableRooms;
+  checkInDate: string,
+    setCheckInDate: (checkInDate:string)=> void,
+  checkOutDate: string, 
+    setCheckOutDate:(checkOutDate: string)=> void,
 };
 
-export function BookingDatesPicker({ fetchAvailableRooms }: BookingDatesPickerProps) {
-  const [checkInDate, setCheckInDate] = useState("");
-  const [checkOutDate, setCheckOutDate] = useState("");
+export function BookingDatesPicker({ fetchAvailableRooms, checkInDate, setCheckInDate, checkOutDate, setCheckOutDate }: BookingDatesPickerProps) {
+ 
 
   const today = new Date().toISOString().split("T")[0];
 

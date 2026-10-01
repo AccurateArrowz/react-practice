@@ -7,9 +7,9 @@ import useFetch from '../../hooks/useFetch';
 
 export type FetchAvailableRooms = ({checkInDate, checkOutDate}: {checkInDate: string, checkOutDate: string})=> void;
   
-export type RoomTypesSelected = { 
-  [roomTypeId: number]: number | null,
-}
+export type SelectedRoomTypes = { 
+  [roomTypeId: number]: number ,
+} ;
 export type UpdateRoomTypesSelected = ({roomTypeId, count}: {roomTypeId: number, count: number})=> void;
 
 export default function HotelDetail() {
@@ -17,14 +17,14 @@ export default function HotelDetail() {
   const {loading, error, data: hotel, fetchData:fetchHotel} = useFetch<Hotel>({url: `http://localhost:3000/api/hotels/${hotelId}`, 
     shouldLazyFetch: false
   });
-   const { data: roomTypesWithAvailableRooms , error: fetchRoomError, fetchData:fetchRooms} = useFetch<RoomTypeWithAvailableRooms[]>({url: `http://localhost:3000/api/hotels/${hotelId}/availability`, 
+   const { loading: loadingAvailableRoomTypes, data: availableRoomTypes , error: fetchRoomError, fetchData:fetchRooms} = useFetch<RoomTypeWithAvailableRooms[]>({url: `http://localhost:3000/api/hotels/${hotelId}/availability`, 
     shouldLazyFetch: true
-  }); //roomTypesWithAvailableRooms would be set by fetchAvailableRooms function once the checkin and checkout dates have been picked
+  }); //availableRoomTypes would be set by fetchAvailableRooms function once the checkin and checkout dates have been picked
 
-  const [roomTypesSelected, setRoomsSelected ] = useState<RoomTypesSelected>()
+  const [selectedRoomTypes, setSelectedRoomTypes ] = useState<SelectedRoomTypes | null>(null)
 
   const updateRoomTypesSelected: UpdateRoomTypesSelected = ({roomTypeId, count})=> { 
-    setRoomsSelected({...roomTypesSelected, 
+    setSelectedRoomTypes({...selectedRoomTypes, 
       [roomTypeId]: count
     })
   }
@@ -36,34 +36,21 @@ export default function HotelDetail() {
       });
       await fetchRooms(params);
       console.log('fetch Available Rooms resolved')
-      console.log('roomTypesWithAvailableRooms'); 
-      console.log(roomTypesWithAvailableRooms);
   }, []);
 
-  //I am using this useEffects so that the RoomsSelector can show empty dropdown when the checkin dates aere not selected, 
-  useEffect(()=> { //fills selectedRooms with all roomTypes and values as null
-    if(hotel){
-      const initialSelecteRooms: Record<number, number | null>  = { };
-      for (let roomType of hotel.roomTypes){
-        initialSelecteRooms[roomType.id] = null
-      }
-      setRoomsSelected(initialSelecteRooms);
-      console.log(initialSelecteRooms)
-    }
-
-   }, [hotel]);
-
-
-  useEffect(()=> { //fills selectedRooms with all roomTypes and values as 0 
-    if(roomTypesWithAvailableRooms){
+  useEffect(()=> { //fills selectedRooms as 0 for all roomTypes
+    if(availableRoomTypes){
+      console.log('from the effect, once roomTypeWithAvailableRoom changes');
       const initialSelecteRooms: Record<number, number>  = { };
-      for (let roomType of roomTypesWithAvailableRooms){
-        initialSelecteRooms[roomType.id] = 0
+      for (let roomType of availableRoomTypes){
+        console.log('roomType: ',roomType)
+        initialSelecteRooms[roomType.roomTypeId] = 0
       }
-      setRoomsSelected(initialSelecteRooms)
+      console.log(availableRoomTypes)
+      console.log('selected room types: ', initialSelecteRooms)
+      setSelectedRoomTypes(initialSelecteRooms)
     }
-   }, [roomTypesWithAvailableRooms])
-  console.log('Hotel Detail Page renderd +1 ')
+   }, [availableRoomTypes])
 
    if(loading) return <p>Loading Hotel Detail</p>
    if(error)  return <p>Error fetching Hotel Detail {error}</p>
@@ -75,10 +62,17 @@ export default function HotelDetail() {
       <h2>{hotel.name }</h2>
       <div className="flex gap-3 border-amber-200 border-1">
 
-      <RoomTypesTable roomTypes={roomTypesWithAvailableRooms ?? hotel.roomTypes}
+      <RoomTypesTable 
+      roomTypes={availableRoomTypes ?? hotel.roomTypes}
+      loadingAvailableRoomTypes = {loadingAvailableRoomTypes}
+      selectedRoomTypes = {selectedRoomTypes}
        updateRoomTypesSelected= {updateRoomTypesSelected}
       ></RoomTypesTable>
-      <Sidebar fetchAvailableRooms={fetchAvailableRooms}></Sidebar>
+      <Sidebar 
+        fetchAvailableRooms={fetchAvailableRooms}
+        selectedRoomTypes={selectedRoomTypes}>
+
+        </Sidebar>
       </div>
       </>
       }
