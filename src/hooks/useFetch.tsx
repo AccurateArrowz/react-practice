@@ -6,6 +6,7 @@ interface UseFetchResult<T> {
   loading: boolean;
   error: string;
   fetchData: (query?: URLSearchParams)=> void;
+  updateData: (newData: T)=> void; //function to manually update the data, liek to add some ui state  in case of my 'practice' exec
 }
 
 export default function useFetch<T = unknown>({url, queryParams = '', shouldLazyFetch = false}: {url: string; queryParams?: string; shouldLazyFetch?: boolean}): UseFetchResult<T> {
@@ -26,6 +27,7 @@ export default function useFetch<T = unknown>({url, queryParams = '', shouldLazy
           new URLSearchParams(queryParams).forEach((value, key) => requestUrl.searchParams.set(key, value));
         }
         const response = await fetch(requestUrl);
+        
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }
@@ -46,5 +48,5 @@ export default function useFetch<T = unknown>({url, queryParams = '', shouldLazy
     fetchData();
   }, [url]);
 
-  return { data, loading, error, fetchData };
+  return { data, loading, error, fetchData, updateData: setData };
 }
