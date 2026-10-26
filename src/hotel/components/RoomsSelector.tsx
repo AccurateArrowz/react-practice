@@ -1,16 +1,16 @@
 import React from 'react'
-import { RoomTypeSelections, UpdateRoomTypesSelections } from './HotelDetailPage';
+import useRoomTypeSelections from '../hooks/useRoomTypeSelections';
+
 
 type RoomsSelectorProps = { 
     availableRooms: number | undefined; 
     showSelectionWarning: ()=> void; 
     roomTypeId: string;
-    updateRoomTypeSelections : UpdateRoomTypesSelections;
-    roomTypeSelections: RoomTypeSelections | null ;
 }
 
 //dropdown to select number of rooms for a given roomType
-export default function RoomsSelector({availableRooms, showSelectionWarning,roomTypeId, roomTypeSelections, updateRoomTypeSelections}: RoomsSelectorProps) {
+export default function RoomsSelector({availableRooms, showSelectionWarning,roomTypeId}: RoomsSelectorProps) {
+   const {roomTypeSelections, updateRoomTypeSelections }  = useRoomTypeSelections();
 
     if (availableRooms === undefined) {
         return (

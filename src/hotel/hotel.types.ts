@@ -9,12 +9,9 @@ export interface RoomType {
   children: number;
   createdAt: string;
   updatedAt: string;
-  // Optional nested associations
-  hotel?: Hotel;
 }
 
-export type RoomTypeWithAvailableRooms = RoomType &  {  availableRooms?: number;}
-export type RoomTypesWithAvailableRooms= RoomTypeWithAvailableRooms[]; //note the 's'; this is RoomTypes..
+export type RoomTypeWithAvailableRooms = RoomType &  {  availableRooms: number;}
 
 
 /**

@@ -1,7 +1,8 @@
 import React from 'react'
 
 type BookingButtonProps = { 
-  isEnabled: boolean
+  isEnabled: boolean; 
+  onBooking: ()=> void;
 }
 export default function BookingButton({ isEnabled }: BookingButtonProps) {
   return (

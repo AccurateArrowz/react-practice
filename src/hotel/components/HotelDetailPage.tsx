@@ -5,6 +5,8 @@ import type { Hotel, RoomTypeWithAvailableRooms } from '../hotel.types';
 import Sidebar from './Sidebar';
 import useFetch from '../../hooks/useFetch';
 import useRoomTypeAvailability from '../hooks/useRoomTypeAvailability';
+import { RoomTypeSelections } from '../context/RoomTypeSelectionsContext';
+import useRoomTypeSelections from '../hooks/useRoomTypeSelections';
 
 export type FetchAvailableRooms = ({checkInDate, checkOutDate}: {checkInDate: string, checkOutDate: string})=> void;
   
@@ -12,12 +14,9 @@ export type FetchAvailableRooms = ({checkInDate, checkOutDate}: {checkInDate: st
 //   [roomTypeId: string]: number ,
 // } ;
   
-export type RoomTypeSelections = Array<{
-  roomTypeId: string,
-  count: number,
-}>;
 
-export type UpdateRoomTypesSelections = ({roomTypeId, count}: {roomTypeId: string, count: number})=> void;
+
+
 
 export default function HotelDetail() {
   const {id: hotelId} = useParams();
@@ -28,13 +27,9 @@ export default function HotelDetail() {
     shouldLazyFetch: true
   }); //availableRoomTypes would be set by fetchAvailableRooms function once the checkin and checkout dates have been picked
   const {setRoomTypeWithAvailableRooms} = useRoomTypeAvailability();
-  const [roomTypeSelections, setRoomTypeSelections ] = useState<RoomTypeSelections | null>(null)
 
-  const updateRoomTypeSelections: UpdateRoomTypesSelections = ({roomTypeId, count})=> { 
-    if(roomTypeSelections){
-      setRoomTypeSelections(roomTypeSelections.map(rtSelection=> rtSelection.roomTypeId === roomTypeId? {...rtSelection, count}: rtSelection ))
-    }
-  }
+
+
 
   const fetchAvailableRooms: FetchAvailableRooms = useCallback(async ({checkInDate, checkOutDate} )=> { 
      const params = new URLSearchParams({
@@ -45,17 +40,7 @@ export default function HotelDetail() {
       console.log('fetch Available Rooms resolved')
   }, []);
 
-  useEffect(()=> { //fills selectedRooms as 0 for all roomTypes
-    if(availableRoomTypes){
-      console.log('from the effect, once roomTypeWithAvailableRoom changes');
-      setRoomTypeWithAvailableRooms(availableRoomTypes);
-      const initialRoomTypeSelections = availableRoomTypes.map(({ roomTypeId }) => ({
-        roomTypeId: String(roomTypeId),
-        count: 0,
-      }));
-      setRoomTypeSelections(initialRoomTypeSelections);
-    }
-   }, [availableRoomTypes])
+
 
    if(loading) return <p>Loading Hotel Detail</p>
    if(error)  return <p>Error fetching Hotel Detail {error}</p>
@@ -70,12 +55,11 @@ export default function HotelDetail() {
       <RoomTypesTable 
       roomTypes={availableRoomTypes ?? hotel.roomTypes}
       loadingAvailableRoomTypes = {loadingAvailableRoomTypes}
-      roomTypeSelections = {roomTypeSelections}
-       updateRoomTypeSelections= {updateRoomTypeSelections}
+
       ></RoomTypesTable>
       <Sidebar 
         fetchAvailableRooms={fetchAvailableRooms}
-        roomTypeSelections={roomTypeSelections}>
+        >
 
         </Sidebar>
       </div>

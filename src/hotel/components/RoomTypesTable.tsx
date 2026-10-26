@@ -1,23 +1,24 @@
 import React, { useState } from 'react'
 import { RoomType, RoomTypeWithAvailableRooms } from '../hotel.types'
 import RoomTypeRow from './RoomTypeRow'
-import { SelectedRoomTypes, UpdateRoomTypesSelected } from './HotelDetailPage';
+
+import { RoomTypeSelections } from '../context/RoomTypeSelectionsContext';
 
 type RoomTypesTableProps = { 
     roomTypes: RoomType[] | RoomTypeWithAvailableRooms[];
     loadingAvailableRoomTypes: boolean;
-    selectedRoomTypes: SelectedRoomTypes | null ;
-    updateRoomTypesSelected : UpdateRoomTypesSelected;
+
 }
 
-export default function RoomTypesTable({roomTypes, updateRoomTypesSelected, selectedRoomTypes, loadingAvailableRoomTypes}: RoomTypesTableProps) {
-    const [showSelectionWarning, setShowSelectionWarning] =useState(false);
+export default function RoomTypesTable({roomTypes, loadingAvailableRoomTypes}: RoomTypesTableProps) {
+  const [showSelectionWarning, setShowSelectionWarning] =useState(false);
 
   return (
     <div className='flex-[2]'>
+        {/* warning labels */}
         {showSelectionWarning && !loadingAvailableRoomTypes && <p className='bg-red-300'>Select Checkin and checkout dates to pick the rooms</p>}
         {showSelectionWarning && loadingAvailableRoomTypes && <p className='bg-red-300'>Loading Available Rooms</p>}
-        <p>Room Types</p>
+    <p>Room Types</p>
     <table>
         <thead>
             <tr>
@@ -31,8 +32,7 @@ export default function RoomTypesTable({roomTypes, updateRoomTypesSelected, sele
         <RoomTypeRow key = {roomType.roomTypeId} 
         roomType={roomType}
              showSelectionWarning = {() => setShowSelectionWarning(true)} 
-             selectedRoomTypes = {selectedRoomTypes}
-             updateRoomTypesSelected={updateRoomTypesSelected}
+
              />)}
     </tbody>
 
