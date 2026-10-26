@@ -5,6 +5,7 @@ import type { Hotel, RoomTypeWithAvailableRooms } from '../hotel.types';
 import Sidebar from './Sidebar';
 import useFetch from '../../hooks/useFetch';
 import useRoomTypeAvailability from '../hooks/useRoomTypeAvailability';
+import { RoomTypeSelections } from '../context/RoomTypeSelectionsContext';
 
 export type FetchAvailableRooms = ({checkInDate, checkOutDate}: {checkInDate: string, checkOutDate: string})=> void;
   
@@ -12,10 +13,7 @@ export type FetchAvailableRooms = ({checkInDate, checkOutDate}: {checkInDate: st
 //   [roomTypeId: string]: number ,
 // } ;
   
-export type RoomTypeSelections = Array<{
-  roomTypeId: string,
-  count: number,
-}>;
+
 
 export type UpdateRoomTypesSelections = ({roomTypeId, count}: {roomTypeId: string, count: number})=> void;
 

@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { BookingDatesPicker } from './BookingDatesPicker'
-import { FetchAvailableRooms, SelectedRoomTypes } from './HotelDetailPage'
+import { FetchAvailableRooms } from './HotelDetailPage'
 import BookingButton from './BookingButton';
+import { useParams } from 'react-router-dom';
+import { RoomTypeSelections } from '../context/RoomTypeSelectionsContext';
 
 type SidebarProps = {
   fetchAvailableRooms :FetchAvailableRooms; 
-   selectedRoomTypes: SelectedRoomTypes | null ;
+   roomTypeSelections: RoomTypeSelections | null ;
 }
-export default function Sidebar({fetchAvailableRooms, selectedRoomTypes}: SidebarProps ) {
+export default function Sidebar({fetchAvailableRooms, roomTypeSelections}: SidebarProps ) {
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
+  const {id: hotelId} = useParams();
 
   const canBook = ( ) => { 
     if (!checkInDate || !checkOutDate) {
@@ -17,33 +20,39 @@ export default function Sidebar({fetchAvailableRooms, selectedRoomTypes}: Sideba
     }
     //return false if 0 room is selected 
     let totalRooms = 0 ;
-    if(selectedRoomTypes){
-    for (const [roomTypeId, rooms] of Object.entries(selectedRoomTypes)){
-      totalRooms += rooms
+    if(roomTypeSelections){
+    for (const { count } of roomTypeSelections) {
+      totalRooms += count;
     }
     }
     return totalRooms ===0 ? false: true
   };
 
+  const handleBooking = ()=> { 
+    if(canBook()){
+      postBooking({ hotelId, checkInDate, checkOutDate,roomTypeSelections}) // postBooking function not written
+    }
+  }
+
   useEffect(()=> {
-    console.log('from sidebar, selecteRoomTypes ', selectedRoomTypes);
-  }, [selectedRoomTypes]);
+    console.log('from sidebar, selecteRoomTypes ', roomTypeSelections);
+  }, [roomTypeSelections]);
 
   return (
     <div className = 'flex-1 border-amber-600 border-1 '>
         <p>Sidebar</p>
         <BookingDatesPicker fetchAvailableRooms={fetchAvailableRooms} checkInDate={checkInDate} checkOutDate={checkOutDate} setCheckInDate={setCheckInDate} setCheckOutDate={setCheckOutDate} />
-        {selectedRoomTypes && <div>
+        {roomTypeSelections && <div>
           <p className='mt-4'>Rooms Selected</p>
-          {Object.entries(selectedRoomTypes).map(([roomTypeId, count])=> (
-            <div>
+          {roomTypeSelections.map(({ roomTypeId, count })=> (
+            <div key={roomTypeId}>
             <span>{`roomTypeId ${roomTypeId}`}: </span>
             <span>{count}</span>
             </div>
           ))}
         </div>
         }
-        <BookingButton isEnabled={canBook()} />
+        <BookingButton isEnabled={canBook()} onBooking={handleBooking} />
     </div>
   )
 }

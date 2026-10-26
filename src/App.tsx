@@ -1,5 +1,4 @@
 import './App.css'
-import Nav from './Nav'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Rooms, RoomTypes, Dashboard } from './hotel-management';
@@ -7,12 +6,18 @@ import HotelManagementLayout from './hotel-management/HotelManagementLayout';
 import RequireRole from './hotel-management/RequireRole';
 import Home from './Home';
 import HotelDetail from './hotel/components/HotelDetailPage';
+import { RoomTypeAvailabilityProvider } from './hotel/RoomTypeAvailabilityContext';
+import Rough from './shared/components/Rough.tsx';
 // import {RoomTypes, Rooms}
 
 const hotelManagementRouter = createBrowserRouter([
    {
     path: "/",
-    element: <Home></Home> },
+
+    element: <RoomTypeAvailabilityProvider>
+      <Home></Home>
+      </RoomTypeAvailabilityProvider>
+      },
       {
     path: `/hotels/:id`,
     element: <HotelDetail/> },
@@ -28,6 +33,10 @@ const hotelManagementRouter = createBrowserRouter([
 
     ],
   },
+  {
+    path: "/practice",
+    element: <Rough />,
+  }
 ]);
 
 function App() {
@@ -39,7 +48,6 @@ function App() {
 export default App
 
 // App.jsx — route config
-
 
 
 

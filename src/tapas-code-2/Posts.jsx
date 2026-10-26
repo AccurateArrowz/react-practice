@@ -1,25 +1,12 @@
 import React from 'react'
 
-interface UserPostsProps {
-  userId: string,
-}
-export default function UserPosts({userId}: UserPostsProps) {
-      const [posts, setPosts] = useState([]);
-      
-      const fetchUserPosts = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/api/users/${userId}/posts`
-        );
-        setPosts(response.data);
-      } catch (err) {
-        console.error("Failed to fetch posts");
-      }
-    };
-
-
+export default function Posts({userId}) {
+      useEffect(() => {
+    fetchUserPosts();
+  }, [userId]);
+  
   return (
-   <div className="user-posts">
+     <div className="user-posts">
         <h2>Recent Posts ({posts.length})</h2>
         {posts.length === 0 ? (
           <p>No posts yet.</p>
