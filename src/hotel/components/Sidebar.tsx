@@ -3,8 +3,8 @@ import { BookingDatesPicker } from './BookingDatesPicker'
 import { FetchAvailableRooms } from './HotelDetailPage'
 import BookingButton from './BookingButton';
 import { useParams } from 'react-router-dom';
-import { RoomTypeSelections } from '../context/RoomTypeSelectionsContext';
-import useRoomTypeSelections from '../hooks/useRoomTypeSelections';
+import { RoomSelections } from '../context/RoomSelectionsContext';
+import useRoomSelections from '../hooks/useRoomSelections';
 
 type SidebarProps = {
   fetchAvailableRooms :FetchAvailableRooms; 
@@ -13,7 +13,7 @@ export default function Sidebar({fetchAvailableRooms}: SidebarProps ) {
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const {id: hotelId} = useParams();
-  const {roomTypeSelections} = useRoomTypeSelections();
+  const {roomSelections} = useRoomSelections();
 
   const canBook = ( ) => { 
     if (!checkInDate || !checkOutDate) {
@@ -21,8 +21,8 @@ export default function Sidebar({fetchAvailableRooms}: SidebarProps ) {
     }
     //return false if 0 room is selected 
     let totalRooms = 0 ;
-    if(roomTypeSelections){
-    for (const { count } of roomTypeSelections) {
+    if(roomSelections){
+    for (const { count } of roomSelections) {
       totalRooms += count;
     }
     }
@@ -31,21 +31,21 @@ export default function Sidebar({fetchAvailableRooms}: SidebarProps ) {
 
   const handleBooking = ()=> { 
     if(canBook()){
-      postBooking({ hotelId, checkInDate, checkOutDate,roomTypeSelections}) // postBooking function not written
+      postBooking({ hotelId, checkInDate, checkOutDate,roomSelections}) // postBooking function not written
     }
   }
 
   useEffect(()=> {
-    console.log('from sidebar, selecteRoomTypes ', roomTypeSelections);
-  }, [roomTypeSelections]);
+    console.log('from sidebar, selecteRoomTypes ', roomSelections);
+  }, [roomSelections]);
 
   return (
     <div className = 'flex-1 border-amber-600 border-1 '>
         <p>Sidebar</p>
         <BookingDatesPicker fetchAvailableRooms={fetchAvailableRooms} checkInDate={checkInDate} checkOutDate={checkOutDate} setCheckInDate={setCheckInDate} setCheckOutDate={setCheckOutDate} />
-        {roomTypeSelections && <div>
+        {roomSelections && <div>
           <p className='mt-4'>Rooms Selected</p>
-          {roomTypeSelections.map(({ roomTypeId, count })=> (
+          {roomSelections.map(({ roomTypeId, count })=> (
             <div key={roomTypeId}>
             <span>{`roomTypeId ${roomTypeId}`}: </span>
             <span>{count}</span>

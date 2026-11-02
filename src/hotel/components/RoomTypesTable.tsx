@@ -2,12 +2,11 @@ import React, { useState } from 'react'
 import { RoomType, RoomTypeWithAvailableRooms } from '../hotel.types'
 import RoomTypeRow from './RoomTypeRow'
 
-import { RoomTypeSelections } from '../context/RoomTypeSelectionsContext';
+import { RoomSelections } from '../context/RoomSelectionsContext';
 
 type RoomTypesTableProps = { 
     roomTypes: RoomType[] | RoomTypeWithAvailableRooms[];
     loadingAvailableRoomTypes: boolean;
-
 }
 
 export default function RoomTypesTable({roomTypes, loadingAvailableRoomTypes}: RoomTypesTableProps) {

@@ -1,5 +1,5 @@
 import React from 'react'
-import useRoomTypeSelections from '../hooks/useRoomTypeSelections';
+import useRoomSelections from '../hooks/useRoomSelections';
 
 
 type RoomsSelectorProps = { 
@@ -10,7 +10,7 @@ type RoomsSelectorProps = {
 
 //dropdown to select number of rooms for a given roomType
 export default function RoomsSelector({availableRooms, showSelectionWarning,roomTypeId}: RoomsSelectorProps) {
-   const {roomTypeSelections, updateRoomTypeSelections }  = useRoomTypeSelections();
+   const {roomSelections, updateRoomSelections }  = useRoomSelections();
 
     if (availableRooms === undefined) {
         return (
@@ -27,10 +27,10 @@ export default function RoomsSelector({availableRooms, showSelectionWarning,room
     if (availableRooms === 0) {
       return <span role="status">No rooms available</span>;
     }
-    if (roomTypeSelections) {
+    if (roomSelections) {
 
       const numberArray = Array.from({ length: availableRooms + 1 }, (_, i) => i);
-      const currentRoomType = roomTypeSelections.find(rt=> rt.roomTypeId === roomTypeId);
+      const currentRoomType = roomSelections.find(rt=> rt.roomTypeId === roomTypeId);
       const count = currentRoomType?.count ?? 0;
 
       return (
@@ -38,7 +38,7 @@ export default function RoomsSelector({availableRooms, showSelectionWarning,room
           aria-label={`Rooms for room type ${roomTypeId}`}
           value={count}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-            updateRoomTypeSelections({ roomTypeId, count: Number(e.target.value) });
+            updateRoomSelections({ roomTypeId, count: Number(e.target.value) });
           }}
         >
           {numberArray.map((number) => (
