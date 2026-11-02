@@ -10,7 +10,7 @@ type RoomTypeSelectionsContextValue = {
   setRoomSelections: React.Dispatch<React.SetStateAction<RoomSelections | null>>,
 };
 
-const RoomSelectionsContext = createContext<RoomTypeSelectionsContextValue | null>(null);
+export const RoomSelectionsContext = createContext<RoomTypeSelectionsContextValue | null>(null);
 
 export const RoomSelectionsProvider = ({ children }: React.PropsWithChildren) => {
     const [roomSelections, setRoomSelections] = useState<RoomSelections | null>(null);

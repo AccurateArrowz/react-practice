@@ -8,14 +8,17 @@ import Home from './Home';
 import HotelDetail from './hotel/components/HotelDetailPage';
 import { RoomTypeAvailabilityProvider } from './hotel/RoomTypeAvailabilityContext';
 import Rough from './shared/components/Rough.tsx';
-// import {RoomTypes, Rooms}
+import { RoomSelectionsProvider } from './hotel/context/RoomSelectionsContext.tsx';
 
 const hotelManagementRouter = createBrowserRouter([
    {
     path: "/",
 
     element: <RoomTypeAvailabilityProvider>
+      <RoomSelectionsProvider>
+
       <Home></Home>
+      </RoomSelectionsProvider>
       </RoomTypeAvailabilityProvider>
       },
       {
