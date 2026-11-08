@@ -1,8 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { RoomType, RoomTypeWithAvailableRooms } from '../hotel.types'
 import RoomTypeRow from './RoomTypeRow'
-
-import { RoomSelections } from '../context/RoomSelectionsContext';
 
 type RoomTypesTableProps = { 
     roomTypes: RoomType[] | RoomTypeWithAvailableRooms[];
@@ -10,14 +8,22 @@ type RoomTypesTableProps = {
 }
 
 export default function RoomTypesTable({roomTypes, loadingAvailableRoomTypes}: RoomTypesTableProps) {
-  const [showSelectionWarning, setShowSelectionWarning] =useState(false);
+  const hasSelectedDates = roomTypes.length > 0 && 'availableRooms' in roomTypes[0] && roomTypes[0].availableRooms !== undefined;
 
   return (
     <div className='flex-[2]'>
-        {/* warning labels */}
-        {showSelectionWarning && !loadingAvailableRoomTypes && <p className='bg-red-300'>Select Checkin and checkout dates to pick the rooms</p>}
-        {showSelectionWarning && loadingAvailableRoomTypes && <p className='bg-red-300'>Loading Available Rooms</p>}
-    <p>Room Types</p>
+      {/* Banner shows proactively when dates aren't selected yet */}
+      {!hasSelectedDates && !loadingAvailableRoomTypes && (
+        <p className='p-2 mb-2 bg-amber-100 text-amber-800 text-sm rounded'>
+          Select check-in and check-out dates to view availability and pick rooms.
+        </p>
+      )}
+      {loadingAvailableRoomTypes && (
+        <p className='p-2 mb-2 bg-blue-100 text-blue-800 text-sm rounded'>
+          Loading Available Rooms...
+        </p>
+      )}
+
     <table>
         <thead>
             <tr>
@@ -28,11 +34,11 @@ export default function RoomTypesTable({roomTypes, loadingAvailableRoomTypes}: R
         </thead>
     <tbody >
     {roomTypes?.map(roomType => 
-        <RoomTypeRow key = {roomType.roomTypeId} 
-        roomType={roomType}
-             showSelectionWarning = {() => setShowSelectionWarning(true)} 
-
-             />)}
+        <RoomTypeRow 
+          key={roomType.id} 
+          roomType={roomType}
+        />
+    )}
     </tbody>
 
 

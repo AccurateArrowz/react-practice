@@ -5,10 +5,9 @@ import RoomsSelector from './RoomsSelector';
 
 type RoomTypeRowProps = { 
   roomType: RoomType | RoomTypeWithAvailableRooms; 
-  showSelectionWarning: () => void;
 }
 
-export default function RoomTypeRow({roomType, showSelectionWarning}: RoomTypeRowProps) {
+export default function RoomTypeRow({roomType}: RoomTypeRowProps) {
    const guests = `${roomType.adults } adults ${roomType.children } children`
   return (
     <tr>
@@ -17,9 +16,8 @@ export default function RoomTypeRow({roomType, showSelectionWarning}: RoomTypeRo
     <td>{guests}</td>
     <td>
       <RoomsSelector 
-      roomTypeId={roomType.roomTypeId}
-      availableRooms = {roomType.availableRooms ?? undefined } //intentionally passing undefined to show empty dropdown when user has not selected checkin dates and available rooms is not selected 
-      showSelectionWarning={showSelectionWarning}
+      roomTypeId={(roomType as any).roomTypeId ?? String(roomType.id)}
+      availableRooms = {('availableRooms' in roomType) ? roomType.availableRooms : undefined } //intentionally passing undefined to show empty dropdown when user has not selected checkin dates and available rooms is not selected 
       />
     </td>
     </tr>

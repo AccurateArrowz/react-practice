@@ -4,28 +4,27 @@ import useRoomSelections from '../hooks/useRoomSelections';
 
 type RoomsSelectorProps = { 
     availableRooms: number | undefined; 
-    showSelectionWarning: ()=> void; 
     roomTypeId: string;
 }
 
 //dropdown to select number of rooms for a given roomType
-export default function RoomsSelector({availableRooms, showSelectionWarning,roomTypeId}: RoomsSelectorProps) {
+export default function RoomsSelector({availableRooms, roomTypeId}: RoomsSelectorProps) {
    const {roomSelections, updateRoomSelections }  = useRoomSelections();
 
     if (availableRooms === undefined) {
         return (
           <select
-            aria-label={`Rooms for room type ${roomTypeId}`}
+            disabled
+            aria-label={`Select dates to check availability for room type ${roomTypeId}`}
             value=""
-            onClick={showSelectionWarning}
-            onFocus={showSelectionWarning}
+            className="opacity-50 cursor-not-allowed bg-gray-100 border border-gray-300 rounded px-2 py-1 text-sm text-gray-500"
           >
             <option value="" disabled>Select dates first</option>
           </select>
         );
     }
     if (availableRooms === 0) {
-      return <span role="status">No rooms available</span>;
+      return <span role="status">No rooms</span>;
     }
     if (roomSelections) {
 
